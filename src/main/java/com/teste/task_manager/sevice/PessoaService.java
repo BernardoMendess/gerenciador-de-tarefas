@@ -1,16 +1,19 @@
 package com.teste.task_manager.sevice;
 
-import com.teste.task_manager.model.Pessoa;
+import com.teste.task_manager.model.pessoa.Pessoa;
 import com.teste.task_manager.model.dao.PessoaDAO;
+import com.teste.task_manager.model.pessoa.PessoaComDependencias;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class PessoaService {
 
     private PessoaDAO pessoaDAO;
-
 
     public Pessoa salvarPessoa(Pessoa pessoa){
         return pessoaDAO.save(pessoa);
@@ -28,11 +31,22 @@ public class PessoaService {
 
     private void verificaSePessoaExiste(long id){
         pessoaDAO.findById(id).orElseThrow(() ->
-                new RuntimeException("Pessoa com id " + id + " não encontrada"));
+                new RuntimeException("Pessoa não encontrada"));
+    }
+
+    public List<Pessoa> findAll(){
+        return pessoaDAO.findAll();
     }
 
     public Pessoa findById(long id){
         return pessoaDAO.findById(id).orElseThrow();
     }
 
+    public Integer countPessoasByDepartamentoId(long id){
+        return pessoaDAO.countPessoasByDepartamentoId(id);
+    }
+
+    public List<Pessoa> findByNomeLike(String nome){
+        return pessoaDAO.findByNomeLike("%" + nome + "%");
+    }
 }

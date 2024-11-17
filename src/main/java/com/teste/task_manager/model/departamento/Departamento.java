@@ -1,4 +1,4 @@
-package com.teste.task_manager.model;
+package com.teste.task_manager.model.departamento;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;

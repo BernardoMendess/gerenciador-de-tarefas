@@ -1,5 +1,6 @@
-package com.teste.task_manager.model;
+package com.teste.task_manager.model.pessoa;
 
+import com.teste.task_manager.model.Tarefa;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,5 +25,5 @@ public class Pessoa {
     private Long departamentoId;
 
     @MappedCollection(idColumn = "pessoa_id", keyColumn = "pessoa_id")
-    private List<Tarefa> tarefas = new ArrayList<>();
+    private List<Tarefa> tarefas;
 }
