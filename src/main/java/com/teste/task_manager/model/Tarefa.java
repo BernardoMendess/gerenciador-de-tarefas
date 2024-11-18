@@ -26,7 +26,7 @@ public class Tarefa {
 
     @NotNull private LocalDate prazo;
 
-    @NotNull private long departamentoId;
+    @NotNull @With private long departamentoId;
 
     private Long duracao;
 
@@ -40,5 +40,9 @@ public class Tarefa {
 
     public void calculaDuracao(){
         duracao = Duration.between(dataInicial, dataFinal).toHours();
+    }
+
+    public boolean isFinalizado() {
+        return finalizado;
     }
 }

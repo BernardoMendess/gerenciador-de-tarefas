@@ -27,8 +27,7 @@ public class TarefaService {
     }
 
     public Tarefa finalizarTarefa(long id) {
-        val tarefa = tarefaDAO.findById(id).orElseThrow(() ->
-                new RuntimeException("Tarefa não encontrada"));
+        val tarefa = findTarefaById(id);
 
         verificaSePodeFinalizar(tarefa);
 
@@ -36,6 +35,11 @@ public class TarefaService {
         tarefa.setDataFinal(LocalDateTime.now());
         tarefa.calculaDuracao();
         return tarefaDAO.save(tarefa);
+    }
+
+    public Tarefa findTarefaById(long id){
+        return tarefaDAO.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Tarefa não encontrada."));
     }
 
     //considerei que para a tarefa ser finalizada, ela deve ter sido atribuida a alguem, pois isso sinaliza que ela esta em andamento
@@ -52,7 +56,8 @@ public class TarefaService {
     //considerei que a partir do momento em que uma pessoa eh alocada em uma tarefa, a tarefa comeca a ser feita
     public Tarefa alocarPessoaNaTarefa(long id, long pessoaId){
         val tarefa = tarefaDAO.findById(id).orElseThrow();
-        val pessoa = pessoaService.findById(pessoaId);
+        verificaSePodeAlocar(tarefa);
+        val pessoa = pessoaService.findPessoaById(pessoaId);
         verificaDepartamento(tarefa, pessoa);
         tarefa.setPessoaId(pessoaId);
         tarefa.setDataInicial(LocalDateTime.now());
@@ -62,6 +67,12 @@ public class TarefaService {
     private void verificaDepartamento(Tarefa tarefa, Pessoa pessoa) {
         if(tarefa.getDepartamentoId() != pessoa.getDepartamentoId()){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "A pessoa selecionada não pertence ao departamento relacionado a essa tarefa.");
+        }
+    }
+
+    private void verificaSePodeAlocar(Tarefa tarefa) {
+        if(tarefa.getPessoaId() != null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe uma pessoa alocada para essa tarefa.");
         }
     }
 

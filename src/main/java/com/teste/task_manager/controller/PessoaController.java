@@ -39,7 +39,7 @@ public class PessoaController {
     //Alterar um pessoa (put/pessoas/{id})
     @PutMapping("/{id}")
     public ResponseEntity<Pessoa> edit(@PathVariable Long id, @RequestBody @Valid Pessoa pessoa) {
-        val pessoaSalva = pessoaService.alterarPessoa(pessoa);
+        val pessoaSalva = pessoaService.alterarPessoa(pessoa.withId(id));
         return ResponseEntity.status(HttpStatus.OK).body(pessoaSalva);
     }
 
