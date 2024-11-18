@@ -140,26 +140,11 @@ public class TarefaServiceTest {
     @Transactional
     public void quando_busca_tarefas_mais_antigas_sem_pessoa_alocada() {
 
-        val tarefaP10Dias =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 1 RH",
-                "Tarefa 1 RH descrição", LocalDate.now().plusDays(10),
-                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, null, null, null));
-        val tarefaM5Dias =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 2 RH",
-                "Tarefa 2 RH descrição", LocalDate.now().minusDays(5),
-                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, null, null, null));
-        val tarefaHoje =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 3 RH",
-                "Tarefa 3 RH descrição", LocalDate.now(),
-                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, null, null, null));
-        val tarefaP15Dias =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 4 RH",
-                "Tarefa 4 RH descrição", LocalDate.now().plusDays(15),
-                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, null, null, null));
-        val tarefaP20Dias =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 5 RH",
-                "Tarefa 5 RH descrição", LocalDate.now().plusDays(20),
-                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, null, null, null));
+        val tarefaP10Dias = tarefaService.salvarTarefa(criaTarefaRHComTituloEDataInicial("Tarefa 1 RH", LocalDate.now().plusDays(10)));
+        val tarefaP15Dias =  tarefaService.salvarTarefa(criaTarefaRHComTituloEDataInicial("Tarefa 4 RH", LocalDate.now().plusDays(15)));
+        val tarefaP20Dias =  tarefaService.salvarTarefa(criaTarefaRHComTituloEDataInicial("Tarefa 5 RH", LocalDate.now().plusDays(20)));
+        val tarefaHoje =  tarefaService.salvarTarefa(criaTarefaRHComTituloEDataInicial("Tarefa 3 RH", LocalDate.now()));
+        val tarefaM5Dias =   tarefaService.salvarTarefa(criaTarefaRHComTituloEDataInicial("Tarefa 2 RH", LocalDate.now().minusDays(5)));
 
         val tarefasEsperadas = List.of(tarefaM5Dias, tarefaHoje, tarefaP10Dias);
 
@@ -179,7 +164,14 @@ public class TarefaServiceTest {
     private Tarefa criaTarefa() {
         return new Tarefa(null, "Tarefa Exemplo",
                 "Tarefa exemplo descrição", LocalDate.now().plusDays(2),
-                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10,
+                null, null, null, null);
+    }
+
+    private Tarefa criaTarefaRHComTituloEDataInicial(String titulo, LocalDate data) {
+        return new Tarefa(null, titulo,
+                "Tarefa RH descrição", data,
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10,
                 null, null, null, null);
     }
 

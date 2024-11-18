@@ -28,19 +28,15 @@ public class Tarefa {
 
     @NotNull @With private long departamentoId;
 
-    private Long duracao;
+    @NotNull private int duracao;
 
     @With private Boolean finalizado;
 
-    private Long pessoaId;
+    @With private Long pessoaId;
 
-    private LocalDateTime dataInicial;
+    @With private LocalDateTime dataInicial;
 
     private LocalDateTime dataFinal;
-
-    public void calculaDuracao(){
-        duracao = Duration.between(dataInicial, dataFinal).toHours();
-    }
 
     public boolean isFinalizado() {
         return finalizado;

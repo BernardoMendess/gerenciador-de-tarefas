@@ -33,7 +33,6 @@ public class TarefaService {
 
         tarefa.setFinalizado(true);
         tarefa.setDataFinal(LocalDateTime.now());
-        tarefa.calculaDuracao();
         return tarefaDAO.save(tarefa);
     }
 

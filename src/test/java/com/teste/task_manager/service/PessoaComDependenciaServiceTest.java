@@ -44,21 +44,14 @@ public class PessoaComDependenciaServiceTest {
     @Rollback
     @Transactional
     public void quando_busca_todas_as_pessoas_e_retorna_nome_departamento_e_horas_gastas() {
-        val dataAtual = LocalDate.now();
         val pessoa1 = pessoaService.salvarPessoa(new Pessoa(null, "Bernardo Mendes", ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of()));
         val pessoa2 = pessoaService.salvarPessoa( new Pessoa(null, "Marcia Silva", ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of()));
 
-        val tarefa1P1 =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo",
-                "Tarefa exemplo descrição", LocalDate.now().plusDays(2),  ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, pessoa1.getId(), LocalDateTime.of(dataAtual.getYear(), dataAtual.getMonth(), dataAtual.getDayOfMonth(), 0, 0), null));
+        val tarefa1P1 =  tarefaService.salvarTarefa(criaTarefaComDuracaoEPessoaAlocada(10, pessoa1.getId()));
 
-        val tarefa2P1 =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo",
-                "Tarefa exemplo descrição", LocalDate.now().plusDays(2), ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, pessoa1.getId(), LocalDateTime.of(dataAtual.getYear(), dataAtual.getMonth(), dataAtual.minusDays(1).getDayOfMonth(), 10, 0), null));
+        val tarefa2P1 =  tarefaService.salvarTarefa(criaTarefaComDuracaoEPessoaAlocada(5, pessoa1.getId()));
 
-        val tarefa1P2 =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo",
-                "Tarefa exemplo descrição", LocalDate.now().plusDays(2), ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, pessoa2.getId(), LocalDateTime.of(dataAtual.getYear(), dataAtual.getMonth(), dataAtual.getDayOfMonth(), 0, 0), null));
+        val tarefa1P2 =  tarefaService.salvarTarefa(criaTarefaComDuracaoEPessoaAlocada(8, pessoa2.getId()));
 
         tarefaService.finalizarTarefa(tarefa1P1.getId());
         tarefaService.finalizarTarefa(tarefa2P1.getId());
@@ -69,34 +62,25 @@ public class PessoaComDependenciaServiceTest {
 
         assertEquals(pessoa1.getNome(), pessoas.get(0).nome());
         assertEquals(departamentoService.findObjById(pessoa1.getDepartamentoId()).nome(), pessoas.get(0).departamento());
-        assertTrue(pessoas.get(0).horasGastas() > 0);
+        assertEquals(tarefa1P1.getDuracao()+tarefa2P1.getDuracao(), pessoas.get(0).horasGastas());
 
         assertEquals(pessoa2.getNome(), pessoas.get(1).nome());
         assertEquals(departamentoService.findObjById(pessoa2.getDepartamentoId()).nome(), pessoas.get(1).departamento());
-        assertTrue(pessoas.get(1).horasGastas() > 0);
-
-        assertTrue(pessoas.get(0).horasGastas() > pessoas.get(1).horasGastas());
+        assertEquals(tarefa1P2.getDuracao(), pessoas.get(1).horasGastas());
     }
 
     @Test
     @Rollback
     @Transactional
     public void quando_busca_pessoas_em_um_periodo_entao_retorna_nome_e_media_horas_gastas() {
-        val dataAtual = LocalDate.now();
         val pessoa1 = pessoaService.salvarPessoa(new Pessoa(null, "Bernardo Mendes", ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of()));
         val pessoa2 = pessoaService.salvarPessoa( new Pessoa(null, "Marcia Silva", ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of()));
 
-        val tarefa1P1 =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo", "Tarefa exemplo descrição", LocalDate.now().plusDays(2),
-                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null, null, pessoa1.getId(),
-                LocalDateTime.of(dataAtual.getYear(), dataAtual.getMonth(), dataAtual.getDayOfMonth(), 0, 0), null));
+        val tarefa1P1 =  tarefaService.salvarTarefa(criaTarefaComDuracaoEPessoaAlocada(10, pessoa1.getId()));
 
-        val tarefa2P1 =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo",
-                "Tarefa exemplo descrição", LocalDate.now().plusDays(2), ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, pessoa1.getId(), LocalDateTime.of(dataAtual.getYear(), dataAtual.getMonth(), dataAtual.minusDays(1).getDayOfMonth(), 10, 0), null));
+        val tarefa2P1 =  tarefaService.salvarTarefa(criaTarefaComDuracaoEPessoaAlocada(5, pessoa1.getId()));
 
-        val tarefa1P2 =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo",
-                "Tarefa exemplo descrição", LocalDate.now().plusDays(2), ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
-                null, pessoa2.getId(), LocalDateTime.of(dataAtual.getYear(), dataAtual.getMonth(), dataAtual.getDayOfMonth(), 0, 0), null));
+        val tarefa1P2 =  tarefaService.salvarTarefa(criaTarefaComDuracaoEPessoaAlocada(8, pessoa2.getId()));
 
         tarefaService.finalizarTarefa(tarefa1P1.getId());
         tarefaService.finalizarTarefa(tarefa2P1.getId());
@@ -106,9 +90,15 @@ public class PessoaComDependenciaServiceTest {
         assertEquals(1, pessoas.size());
 
         assertEquals(pessoa1.getNome(), pessoas.get(0).nome());
-        //aqui eu considerei que a media vai ser sempre a hora atual, pois o tarefa1 da pessoa 1 comeca na hora 0 do dia, e so estou pegando essa tarefa
-        assertEquals(LocalDateTime.now().getHour(), pessoas.get(0).mediaHorasGastas());
+        assertEquals((double) (tarefa1P1.getDuracao() + tarefa2P1.getDuracao()) /2, pessoas.get(0).mediaHorasGastas());
 
+    }
+
+    public Tarefa criaTarefaComDuracaoEPessoaAlocada(int duracao, long pessoaId){
+        val dataAtual = LocalDate.now();
+        return new Tarefa(null, "Tarefa Exemplo", "Tarefa exemplo descrição", LocalDate.now().plusDays(2),
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, duracao, null, pessoaId,
+                LocalDateTime.of(dataAtual.getYear(), dataAtual.getMonth(), dataAtual.getDayOfMonth(), 0, 0), null);
     }
 
 }

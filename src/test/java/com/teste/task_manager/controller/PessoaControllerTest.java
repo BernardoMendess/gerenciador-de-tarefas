@@ -82,7 +82,7 @@ public class PessoaControllerTest {
     }
 
     @Test
-    public void quando_post_salvar_pessoa_com_dados_invalidos_entao_quebra() throws Exception {
+    public void quando_recebe_pessoa_com_dados_invalidos_entao_quebra() throws Exception {
 
         mockMvc.perform(post("/pessoas")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -112,11 +112,11 @@ public class PessoaControllerTest {
         val pessoa = pessoaService.salvarPessoa( new Pessoa(null, "Marcia Silva", Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of()));
 
         val tarefa1 = tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo", "Tarefa exemplo descrição", LocalDate.now(),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10L, null, pessoa.getId(),
+                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10, null, pessoa.getId(),
                 null, null));
 
         val tarefa2 = tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo", "Tarefa exemplo descrição", LocalDate.now(),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 5L, null, pessoa.getId(),
+                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 5, null, pessoa.getId(),
                 null, null));
 
         mockMvc.perform(get("/pessoas"))
@@ -133,17 +133,17 @@ public class PessoaControllerTest {
         val pessoa1 = pessoaService.salvarPessoa( new Pessoa(null, "João Silva", Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of()));
 
         val tarefa1P1 = tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo", "Tarefa exemplo descrição", LocalDate.now(),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10L, null, pessoa1.getId(),
+                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10, null, pessoa1.getId(),
                 LocalDateTime.now(), LocalDateTime.now()));
 
         val tarefa2P1 = tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo", "Tarefa exemplo descrição", LocalDate.now(),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 5L, null, pessoa1.getId(),
+                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 5, null, pessoa1.getId(),
                 LocalDateTime.now(), LocalDateTime.now()));
 
         val pessoa2 = pessoaService.salvarPessoa( new Pessoa(null, "Marcos Silva", Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of()));
 
         val tarefa1P2 = tarefaService.salvarTarefa(new Tarefa(null, "Tarefa Exemplo", "Tarefa exemplo descrição", LocalDate.now(),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10L, null, pessoa2.getId(),
+                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10, null, pessoa2.getId(),
                 LocalDateTime.now(), LocalDateTime.now()));
 
         mockMvc.perform(get("/pessoas/gastos")

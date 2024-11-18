@@ -53,11 +53,11 @@ public class DepartamentoControllerTest {
         val tarefasRH = List.of(
                 tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 1 RH",
                         "Tarefa 1 RH descrição", LocalDate.now(),
-                        ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                        ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10,
                         null, null, null, null)),
                 tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 2",
                         "Tarefa 2 descrição", LocalDate.now(),
-                        ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                        ID_DEPARTAMENTO_RECURSOS_HUMANOS, 10,
                         null, null, null, null)));
 
         val pessoasTI = List.of(pessoaService.salvarPessoa(
@@ -66,7 +66,7 @@ public class DepartamentoControllerTest {
         val tarefasTI = List.of(
                 tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 1 TI",
                         "Tarefa 1 TI descrição", LocalDate.now(),
-                        Departamento.ID_DEPARTAMENTO_TI, null,
+                        Departamento.ID_DEPARTAMENTO_TI, 10,
                         null, null, null, null)));
 
         mockMvc.perform(get("/departamentos"))
