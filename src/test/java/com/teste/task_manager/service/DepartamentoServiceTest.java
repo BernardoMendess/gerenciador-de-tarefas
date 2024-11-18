@@ -2,7 +2,6 @@ package com.teste.task_manager.service;
 
 import com.teste.task_manager.model.Tarefa;
 import com.teste.task_manager.model.departamento.Departamento;
-import com.teste.task_manager.model.departamento.DepartamentoComDependencias;
 import com.teste.task_manager.model.pessoa.Pessoa;
 import com.teste.task_manager.sevice.DepartamentoService;
 import com.teste.task_manager.sevice.PessoaService;
@@ -18,11 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static com.teste.task_manager.model.departamento.Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -43,17 +40,17 @@ public class DepartamentoServiceTest {
     @Transactional
     public void quando_busca_departamentos_com_dependencias_entao_ok() {
         val pessoasRH = List.of(
-            pessoaService.salvarPessoa(new Pessoa(null, "Carlos Souza", Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of())),
-            pessoaService.salvarPessoa(new Pessoa(null, "Maria Jose", Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of())));
+            pessoaService.salvarPessoa(new Pessoa(null, "Carlos Souza", ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of())),
+            pessoaService.salvarPessoa(new Pessoa(null, "Maria Jose", ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of())));
 
         val tarefasRH = List.of(
             tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 1 RH",
                 "Tarefa 1 RH descrição", LocalDate.now(),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
                 null, null, null, null)),
             tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 2",
                         "Tarefa 2 descrição", LocalDate.now(),
-                        Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                        ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
                         null, null, null, null)));
 
         val pessoasTI = List.of(pessoaService.salvarPessoa(
@@ -67,7 +64,7 @@ public class DepartamentoServiceTest {
 
         val departamentosComDependencias = departamentoService.findAllDepartamentosComDependencias();
 
-        assertEquals(Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, departamentosComDependencias.get(0).departamento().id());
+        assertEquals(ID_DEPARTAMENTO_RECURSOS_HUMANOS, departamentosComDependencias.get(0).departamento().id());
         assertEquals(pessoasRH.size(), departamentosComDependencias.get(0).quantidadePessoas());
         assertEquals(tarefasRH.size(), departamentosComDependencias.get(0).quantidadeTarefas());
 

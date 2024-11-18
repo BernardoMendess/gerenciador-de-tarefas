@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.teste.task_manager.model.departamento.Departamento.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,8 +83,8 @@ public class TarefaServiceTest {
     @Transactional
     public void quando_tenta_alocar_pessoa_na_tarefa_mas_pessoa_nao_pertence_ao_departamento_da_tarefa() {
 
-        val pessoa = pessoaService.salvarPessoa(criaPessoa().withDepartamentoId(Departamento.ID_DEPARTAMENTO_TI));
-        val tarefa = tarefaService.salvarTarefa(criaTarefa().withDepartamentoId(Departamento.ID_DEPARTAMENTO_MARKETING));
+        val pessoa = pessoaService.salvarPessoa(criaPessoa().withDepartamentoId(ID_DEPARTAMENTO_TI));
+        val tarefa = tarefaService.salvarTarefa(criaTarefa().withDepartamentoId(ID_DEPARTAMENTO_MARKETING));
 
         assertThatExceptionOfType(ResponseStatusException.class)
                 .isThrownBy(() -> tarefaService.alocarPessoaNaTarefa(tarefa.getId(), pessoa.getId()))
@@ -128,10 +129,10 @@ public class TarefaServiceTest {
     @Transactional
     public void contar_tarefas_por_departamento_id() {
 
-        tarefaService.salvarTarefa(criaTarefa().withDepartamentoId(Departamento.ID_DEPARTAMENTO_MARKETING));
-        tarefaService.salvarTarefa(criaTarefa().withDepartamentoId(Departamento.ID_DEPARTAMENTO_MARKETING));
-        tarefaService.salvarTarefa(criaTarefa().withDepartamentoId(Departamento.ID_DEPARTAMENTO_TI));
-        assertEquals(2, tarefaService.countTarefasByDepartamentoId(Departamento.ID_DEPARTAMENTO_MARKETING));
+        tarefaService.salvarTarefa(criaTarefa().withDepartamentoId(ID_DEPARTAMENTO_MARKETING));
+        tarefaService.salvarTarefa(criaTarefa().withDepartamentoId(ID_DEPARTAMENTO_MARKETING));
+        tarefaService.salvarTarefa(criaTarefa().withDepartamentoId(ID_DEPARTAMENTO_TI));
+        assertEquals(2, tarefaService.countTarefasByDepartamentoId(ID_DEPARTAMENTO_MARKETING));
     }
 
     @Test
@@ -141,23 +142,23 @@ public class TarefaServiceTest {
 
         val tarefaP10Dias =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 1 RH",
                 "Tarefa 1 RH descrição", LocalDate.now().plusDays(10),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
                 null, null, null, null));
         val tarefaM5Dias =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 2 RH",
                 "Tarefa 2 RH descrição", LocalDate.now().minusDays(5),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
                 null, null, null, null));
         val tarefaHoje =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 3 RH",
                 "Tarefa 3 RH descrição", LocalDate.now(),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
                 null, null, null, null));
         val tarefaP15Dias =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 4 RH",
                 "Tarefa 4 RH descrição", LocalDate.now().plusDays(15),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
                 null, null, null, null));
         val tarefaP20Dias =  tarefaService.salvarTarefa(new Tarefa(null, "Tarefa 5 RH",
                 "Tarefa 5 RH descrição", LocalDate.now().plusDays(20),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
                 null, null, null, null));
 
         val tarefasEsperadas = List.of(tarefaM5Dias, tarefaHoje, tarefaP10Dias);
@@ -178,11 +179,11 @@ public class TarefaServiceTest {
     private Tarefa criaTarefa() {
         return new Tarefa(null, "Tarefa Exemplo",
                 "Tarefa exemplo descrição", LocalDate.now().plusDays(2),
-                Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
+                ID_DEPARTAMENTO_RECURSOS_HUMANOS, null,
                 null, null, null, null);
     }
 
     private Pessoa criaPessoa(){
-        return new Pessoa(null, "Bernardo Mendes", Departamento.ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of());
+        return new Pessoa(null, "Bernardo Mendes", ID_DEPARTAMENTO_RECURSOS_HUMANOS, List.of());
     }
 }

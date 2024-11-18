@@ -53,7 +53,7 @@ public class PessoaController {
     //Listar pessoas trazendo nome, departamento, total horas gastas nas tarefas.(get/pessoas)
     @GetMapping("")
     public ResponseEntity<List<PessoaComDependencias>> listPessoas(){
-        val pessoas = pessoaComDependenciaService.findAllPessoas();
+        val pessoas = pessoaComDependenciaService.findAllPessoasComDependencias();
         return ResponseEntity.status(HttpStatus.OK).body(pessoas);
     }
 

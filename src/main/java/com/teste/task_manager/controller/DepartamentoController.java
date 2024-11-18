@@ -21,7 +21,7 @@ public class DepartamentoController {
 
     //Listar departamento e quantidade de pessoas e tarefas (get/departamentos)
     @GetMapping("")
-    public ResponseEntity<List<DepartamentoComDependencias>> listTarefasAntigasSemPessoaAlocada() {
+    public ResponseEntity<List<DepartamentoComDependencias>> listDepartamentos() {
         val departamentos =  departamentoService.findAllDepartamentosComDependencias();
         return ResponseEntity.status(HttpStatus.OK).body(departamentos);
     }

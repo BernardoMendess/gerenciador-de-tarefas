@@ -19,7 +19,7 @@ public class PessoaComDependenciaService {
 
     private DepartamentoService departamentoService;
 
-    public List<PessoaComDependencias> findAllPessoas(){
+    public List<PessoaComDependencias> findAllPessoasComDependencias(){
         val pessoas = pessoaService.findAll();
         return pessoas.stream().map(pessoa ->
                 new PessoaComDependencias(
