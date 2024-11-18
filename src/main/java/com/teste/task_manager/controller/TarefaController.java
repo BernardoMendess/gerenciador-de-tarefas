@@ -36,23 +36,15 @@ public class TarefaController {
     //Alocar uma pessoa na tarefa que tenha o mesmo departamento (put/tarefas/alocar/{id})
     @PutMapping("/alocar/{id}")
     public ResponseEntity<Tarefa> alocarPessoaNaTarefa(@PathVariable long id, @RequestBody Long pessoaId){
-        try{
-            val tarefaSalva = tarefaService.alocarPessoaNaTarefa(id, pessoaId);
-            return ResponseEntity.status(HttpStatus.OK).body(tarefaSalva);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+         val tarefaSalva = tarefaService.alocarPessoaNaTarefa(id, pessoaId);
+         return ResponseEntity.status(HttpStatus.OK).body(tarefaSalva);
     }
 
     //Finalizar a tarefa (put/tarefas/finalizar/{id})
     @PutMapping("/finalizar/{id}")
     public ResponseEntity<Tarefa> finalizarTarefa(@PathVariable long id) {
-        try {
-            val tarefaFinalizada = tarefaService.finalizarTarefa(id);
-            return ResponseEntity.status(HttpStatus.OK).body(tarefaFinalizada);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+         val tarefaFinalizada = tarefaService.finalizarTarefa(id);
+         return ResponseEntity.status(HttpStatus.OK).body(tarefaFinalizada);
     }
 
     //Listar 3 tarefas que estejam sem pessoa alocada com os prazos mais antigos. (get/tarefas/pendentes)

@@ -36,7 +36,7 @@ public class PessoaComDependenciaService {
                 new PessoaGastos(
                         pessoa.getNome(),
                         tarefaService.findMediaByPessoaIdAndPeriodo
-                                (pessoa.getId(), dataFinal.atStartOfDay(), dataFinal.atTime(23, 59, 59))
+                                (pessoa.getId(), dataInicial.atStartOfDay(), dataFinal.atTime(23, 59, 59))
                 )).toList();
     }
 }

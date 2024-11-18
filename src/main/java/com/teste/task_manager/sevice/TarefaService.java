@@ -5,7 +5,9 @@ import com.teste.task_manager.model.Tarefa;
 import com.teste.task_manager.model.dao.TarefaDAO;
 import lombok.AllArgsConstructor;
 import lombok.val;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,7 +26,7 @@ public class TarefaService {
         return tarefaDAO.save(tarefa.withFinalizado(false));
     }
 
-    public Tarefa finalizarTarefa(long id) throws Exception {
+    public Tarefa finalizarTarefa(long id) {
         val tarefa = tarefaDAO.findById(id).orElseThrow(() ->
                 new RuntimeException("Tarefa não encontrada"));
 
@@ -37,9 +39,9 @@ public class TarefaService {
     }
 
     //considerei que para a tarefa ser finalizada, ela deve ter sido atribuida a alguem, pois isso sinaliza que ela esta em andamento
-    private void verificaSePodeFinalizar(Tarefa tarefa) throws Exception {
+    private void verificaSePodeFinalizar(Tarefa tarefa) {
         if(tarefa.getPessoaId() == null){
-            throw new Exception("A tarefa não pode ser finalizada.");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "A tarefa não pode ser finalizada, pois ainda não foi iniciada.");
         }
     }
 
@@ -48,7 +50,7 @@ public class TarefaService {
     }
 
     //considerei que a partir do momento em que uma pessoa eh alocada em uma tarefa, a tarefa comeca a ser feita
-    public Tarefa alocarPessoaNaTarefa(long id, long pessoaId) throws Exception {
+    public Tarefa alocarPessoaNaTarefa(long id, long pessoaId){
         val tarefa = tarefaDAO.findById(id).orElseThrow();
         val pessoa = pessoaService.findById(pessoaId);
         verificaDepartamento(tarefa, pessoa);
@@ -57,9 +59,9 @@ public class TarefaService {
         return tarefaDAO.save(tarefa);
     }
 
-    private void verificaDepartamento(Tarefa tarefa, Pessoa pessoa) throws Exception {
+    private void verificaDepartamento(Tarefa tarefa, Pessoa pessoa) {
         if(tarefa.getDepartamentoId() != pessoa.getDepartamentoId()){
-            throw new Exception("A pessoa não pertence ao departamento relacionado a tarefa.");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "A pessoa selecionada não pertence ao departamento relacionado a essa tarefa.");
         }
     }
 
