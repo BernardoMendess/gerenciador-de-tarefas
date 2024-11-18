@@ -1,10 +1,14 @@
 Script para criar as tabelas no banco de dados "tarefas" e "tarefas_test"
 
+-- Criar a tabela 'departamento'
+
 CREATE TABLE IF NOT EXISTS departamento (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
     nome character varying(200) COLLATE pg_catalog."default",
     CONSTRAINT departamento_pkey PRIMARY KEY (id)
 );
+
+-- Inserir dados iniciais na tabela 'departamento'
 
 INSERT INTO departamento (nome) VALUES
 ('Recursos Humanos'),
@@ -18,6 +22,8 @@ INSERT INTO departamento (nome) VALUES
 ('Logística'),
 ('Jurídico');
 
+-- Criar a tabela 'pessoa'
+
 CREATE TABLE IF NOT EXISTS pessoa (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
     nome character varying(200) COLLATE pg_catalog."default" NOT NULL,
@@ -28,6 +34,8 @@ CREATE TABLE IF NOT EXISTS pessoa (
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
+
+-- Criar a tabela 'tarefa'
 
 CREATE TABLE IF NOT EXISTS public.tarefa (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
