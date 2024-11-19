@@ -34,6 +34,7 @@ public class Tarefa {
 
     @With private Long pessoaId;
 
+    //Adicionei os campos data inicial e data final para filtrar as tarefas pelo prazo
     @With private LocalDateTime dataInicial;
 
     private LocalDateTime dataFinal;
